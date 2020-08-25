@@ -1,0 +1,10 @@
+[Unit]
+Description=CloudMinder
+After=network.target
+[Service]
+User=dana
+WorkingDirectory=/home/dana/CloudMinder
+ExecStart=/opt/conda/default/bin/node CloudMinder
+[Install]
+WantedBy=multi-user.target
+
