@@ -7,20 +7,25 @@ const app = express();
 app.listen(2112, () => {
 });
 
-const averages = os.loadavg();
-const cpus = os.cpus();
-const totalmem = os.totalmem();
-const freemem = os.freemem();
-const freemempercent = freemem / totalmem * 100.0;
 
 app.get("/status", (req, res, next) => {
+
+  const averages = os.loadavg();
+  const cpus = os.cpus();
+  const totalmem = os.totalmem();
+  const freemem = os.freemem();
+  const freemempercent = freemem / totalmem * 100.0;
+  const loadpercent = (averages[2] / cpus.length) * 100.0;
+
   res.json({
     load: averages[2],
+    loadpercent: loadpercent,
     cpus: cpus.length,
     uptime: os.uptime(),
     totalmem: totalmem,
     freemem: freemem,
     freemempercent: freemempercent
   });
+
 });
 
