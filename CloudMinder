@@ -18,6 +18,7 @@ app.get("/status", (req, res, next) => {
   const loadpercent = (averages[2] / cpus.length) * 100.0;
 
   res.json({
+    hostname: os.hostname(),
     load: averages[2],
     loadpercent: loadpercent,
     cpus: cpus.length,
