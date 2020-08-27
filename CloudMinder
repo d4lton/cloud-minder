@@ -1,23 +1,22 @@
 #!/usr/bin/env node
 
+require('dotenv').config()
 const os = require('os');
+const fetch = require('node-fetch');
 const express = require('express');
 const app = express();
 
 app.listen(2112, () => {
 });
 
-
-app.get("/status", (req, res, next) => {
-
+function getStatus() {
   const averages = os.loadavg();
   const cpus = os.cpus();
   const totalmem = os.totalmem();
   const freemem = os.freemem();
   const freemempercent = freemem / totalmem * 100.0;
   const loadpercent = (averages[0] / cpus.length) * 100.0;
-
-  res.json({
+  return {
     hostname: os.hostname(),
     load: averages[0],
     loadpercent: loadpercent,
@@ -25,8 +24,20 @@ app.get("/status", (req, res, next) => {
     uptime: os.uptime(),
     totalmem: totalmem,
     freemem: freemem,
-    freemempercent: freemempercent
-  });
+    freemempercent: freemempercent,
+    interfaces: os.networkInterfaces()
+  };
+}
 
+app.get("/status", (req, res, next) => {
+  res.json(getStatus());
 });
 
+setInterval(() => {
+  fetch(`${process.env.CENTRAL_URL}/ping`, {method: 'POST', body: JSON.stringify(getStatus()), headers: {'Content-Type': 'application/json'}})
+    .then(it => it.json())
+    .then(data => {
+      // anything to do with the response?
+    })
+    .catch(error => {});
+}, 10000);
