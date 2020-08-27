@@ -2,6 +2,7 @@
 
 require('dotenv').config()
 const os = require('os');
+const { spawn } = require('child_process');
 const fetch = require('node-fetch');
 const express = require('express');
 const app = express();
@@ -31,6 +32,13 @@ function getStatus() {
 
 app.get("/status", (req, res, next) => {
   res.json(getStatus());
+});
+
+app.post("/poweroff", (req, res, next) => {
+  const process = spawn('sudo', ['poweroff']);
+  process.stderr.on('data', data => {
+    res.json({error: data});
+  });
 });
 
 setInterval(() => {
