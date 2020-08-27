@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 require('dotenv').config()
+require('array-flat-polyfill');
+require ('es7-object-polyfill');
 const os = require('os');
 const { spawn } = require('child_process');
 const fetch = require('node-fetch');
@@ -19,7 +21,6 @@ function getStatus() {
   const loadpercent = (averages[0] / cpus.length) * 100.0;
   const interfaces = os.networkInterfaces();
   const interface = Object.values(interfaces).flat().find(interface => !interface.internal && interface.family === 'IPv4')
-
   return {
     hostname: os.hostname(),
     load: averages[0],

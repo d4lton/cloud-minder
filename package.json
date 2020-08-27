@@ -10,7 +10,9 @@
   "author": "Dana Basken",
   "license": "ISC",
   "dependencies": {
+    "array-flat-polyfill": "^1.0.1",
     "dotenv": "^8.2.0",
+    "es7-object-polyfill": "^1.0.1",
     "express": "^4.17.1",
     "node-fetch": "^2.6.0"
   }
