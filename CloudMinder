@@ -17,6 +17,9 @@ function getStatus() {
   const freemem = os.freemem();
   const freemempercent = freemem / totalmem * 100.0;
   const loadpercent = (averages[0] / cpus.length) * 100.0;
+  const interfaces = os.networkInterfaces();
+  const interface = Object.values(interfaces).flat().find(interface => !interface.internal && interface.family === 'IPv4')
+
   return {
     hostname: os.hostname(),
     load: averages[0],
@@ -26,7 +29,8 @@ function getStatus() {
     totalmem: totalmem,
     freemem: freemem,
     freemempercent: freemempercent,
-    interfaces: os.networkInterfaces()
+    interfaces: interfaces,
+    interface: interface
   };
 }
 
