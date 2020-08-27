@@ -9,3 +9,9 @@ The service is currently tailored to GCP dataproc nodes.
 1. clone this repo into your home directory on your dataproc node
 2. cd into the CloudMinder directory
 3. run the install.sh script
+
+### Using
+
+Right now, the service provides a `/status` endpoint and runs on port 2112:
+
+    $ curl http://<my-dataproc-node-ip>:2112/status
