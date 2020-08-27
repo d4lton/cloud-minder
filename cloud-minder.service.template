@@ -3,7 +3,7 @@ Description=CloudMinder
 After=network.target
 [Service]
 User=__USER__
-WorkingDirectory=/home/__USER__/CloudMinder
+WorkingDirectory=/home/__USER__/cloud-minder
 ExecStart=__NODE__ CloudMinder
 [Install]
 WantedBy=multi-user.target
