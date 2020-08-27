@@ -7,7 +7,7 @@ The service is currently tailored to GCP dataproc nodes.
 ### Installing
 
 1. clone this repo into your home directory on your dataproc node
-2. cd into the CloudMinder directory
+2. cd into the cloud-minder directory
 3. run the install.sh script
 
 ### Using
