@@ -12,6 +12,14 @@ const app = express();
 app.listen(2112, () => {
 });
 
+function getState(loadpercent, uptime) {
+  let state = "RUNNING";
+  const uptimeHours = uptime / 3600;
+  if (uptimeHours >= 1.0 && loadpercent < 1.0) { state = "IDLE" }
+  if (uptimeHours >= 8.0) { state = "LONG_RUNNING" }
+  return state;
+}
+
 function getStatus() {
   const averages = os.loadavg();
   const cpus = os.cpus();
@@ -20,29 +28,31 @@ function getStatus() {
   const freemempercent = freemem / totalmem * 100.0;
   const loadpercent = (averages[0] / cpus.length) * 100.0;
   const interfaces = os.networkInterfaces();
-  const interface = Object.values(interfaces).flat().find(interface => !interface.internal && interface.family === 'IPv4')
+  const interface = Object.values(interfaces).flat().find(interface => !interface.internal && interface.family === 'IPv4');
+  const uptime = os.uptime();
   return {
     hostname: os.hostname(),
     load: averages[0],
     loadpercent: loadpercent,
     cpus: cpus.length,
-    uptime: os.uptime(),
+    uptime: uptime,
     totalmem: totalmem,
     freemem: freemem,
     freemempercent: freemempercent,
     interfaces: interfaces,
-    interface: interface
+    interface: interface,
+    state: getState(loadpercent, uptime)
   };
 }
 
-app.get("/status", (req, res, next) => {
-  res.json(getStatus());
+app.get("/status", (request, response, next) => {
+  response.json(getStatus());
 });
 
-app.post("/poweroff", (req, res, next) => {
+app.post("/poweroff", (request, response, next) => {
   const process = spawn('sudo', ['poweroff']);
   process.stderr.on('data', data => {
-    res.json({error: data});
+    response.json({error: data});
   });
 });
 
